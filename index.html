@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Gallop</h1>
+  <p class="sub">Arrows or WASD to ride, Space to sprint, G to switch ghost, R to restart. 3 laps.</p>
+  <nav id="tracks"></nav>
+  <main>
+    <canvas id="c" width="800" height="600"></canvas>
+    <aside>
+      <label for="name">Your name</label>
+      <input id="name" maxlength="12" placeholder="for the leaderboard" autocomplete="off">
+      <h2>Fastest times</h2>
+      <ol id="board"></ol>
+      <p id="note"></p>
+    </aside>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
