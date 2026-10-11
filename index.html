@@ -2,16 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Gallop</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Gallop</h1>
-  <p class="sub">Arrows or WASD to ride, Space to sprint, G to switch ghost, R to restart. 3 laps.</p>
+  <p class="sub">Arrows or WASD to ride, Space to sprint, G to switch ghost, R to restart. On a phone, use the buttons. 3 laps.</p>
   <nav id="tracks"></nav>
+  <div id="mini">
+    <button id="btnRestart">Restart</button>
+    <button id="btnGhost">Ghost</button>
+  </div>
   <main>
-    <canvas id="c" width="800" height="600"></canvas>
+    <div class="stage">
+      <canvas id="c" width="800" height="600"></canvas>
+      <div id="pad" aria-label="Touch controls">
+        <div class="grp">
+          <button data-key="arrowleft" aria-label="Steer left">&#9664;</button>
+          <button data-key="arrowright" aria-label="Steer right">&#9654;</button>
+        </div>
+        <div class="grp">
+          <button data-key=" " class="sm" aria-label="Sprint">SPRINT</button>
+          <button data-key="arrowup" class="big" aria-label="Gas">GAS</button>
+        </div>
+      </div>
+    </div>
     <aside>
       <label for="name">Your name</label>
       <input id="name" maxlength="12" placeholder="for the leaderboard" autocomplete="off">

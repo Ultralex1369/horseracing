@@ -13,14 +13,17 @@ h2 { font-size: 1.1rem; margin: 18px 0 6px; }
 .sub { margin: 0 0 10px; opacity: 0.8; font-size: 0.9rem; padding: 0 12px; text-align: center; }
 
 #tracks { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; justify-content: center; }
-#tracks button {
+#mini { display: flex; gap: 8px; margin-bottom: 10px; }
+#tracks button, #mini button {
   font: inherit; color: inherit; background: transparent;
   border: 2px solid #f1e3c4; border-radius: 20px; padding: 4px 14px; cursor: pointer;
 }
 #tracks button.on { background: #f1e3c4; color: #2f4a2a; }
-#tracks button:focus-visible, input:focus-visible { outline: 3px solid #e8892b; outline-offset: 2px; }
+#tracks button:focus-visible, #mini button:focus-visible, input:focus-visible { outline: 3px solid #e8892b; outline-offset: 2px; }
 
 main { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; padding: 0 12px 24px; }
+body { touch-action: manipulation; }
+.stage { display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: 100%; }
 canvas { max-width: 100%; height: auto; border: 4px solid #f1e3c4; border-radius: 6px; }
 
 aside { width: 220px; }
@@ -31,3 +34,32 @@ input {
 }
 ol { margin: 0; padding-left: 22px; line-height: 1.7; }
 #note { font-size: 0.85rem; opacity: 0.8; }
+
+/* ---------- touch controls ---------- */
+#pad {
+  display: none; width: 100%; max-width: 800px; box-sizing: border-box;
+  justify-content: space-between; align-items: flex-end;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+}
+.touch #pad { display: flex; }
+@media (pointer: coarse) { #pad { display: flex; } }
+#pad .grp { display: flex; gap: 12px; align-items: flex-end; }
+#pad button {
+  width: 78px; height: 78px; border-radius: 50%; padding: 0;
+  border: 3px solid #f1e3c4; background: rgba(241, 227, 196, 0.18); color: #fff7e6;
+  font: bold 1.1rem Georgia, serif; touch-action: none; -webkit-tap-highlight-color: transparent;
+}
+#pad button.big { width: 98px; height: 98px; background: rgba(232, 137, 43, 0.55); }
+#pad button.sm { width: 68px; height: 68px; font-size: 0.72rem; }
+#pad button.down { background: #f1e3c4; color: #2f4a2a; }
+
+/* phone held sideways: shrink the page chrome, float the buttons over the corners */
+@media (pointer: coarse) and (orientation: landscape) {
+  h1, .sub { display: none; }
+  canvas { max-height: calc(100vh - 120px); width: auto; }
+  #pad {
+    position: fixed; left: 0; right: 0; bottom: 0; max-width: none; pointer-events: none;
+    padding: 0 18px calc(12px + env(safe-area-inset-bottom));
+  }
+  #pad button { pointer-events: auto; }
+}

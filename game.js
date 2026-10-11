@@ -143,9 +143,9 @@ function update(dt) {
   if (state !== "race") return;
   time += dt;
 
-  const up = keys["arrowup"] || keys["w"], dn = keys["arrowdown"] || keys["s"];
+  const sprint = keys[" "] && stamina > 0; // sprint also pushes forward, so one thumb can do both
+  const up = keys["arrowup"] || keys["w"] || sprint, dn = keys["arrowdown"] || keys["s"];
   const lf = keys["arrowleft"] || keys["a"], rt = keys["arrowright"] || keys["d"];
-  const sprint = keys[" "] && stamina > 0 && up;
   let max = 230, acc = 170;
   if (sprint) { max = 360; acc = 320; stamina = Math.max(0, stamina - 40 * dt); }
 
@@ -263,7 +263,7 @@ function draw() {
   if (state === "done") {
     ctx.fillStyle = "rgba(31,50,28,.88)"; ctx.fillRect(200, 210, 400, 180);
     ctx.fillStyle = "#fff7e6"; ctx.font = "italic 34px Georgia"; ctx.fillText("Finished in " + fmt(time), 400, 265);
-    ctx.font = "20px Georgia"; ctx.fillText(doneNote, 400, 308); ctx.fillText("Press R to ride again", 400, 350);
+    ctx.font = "20px Georgia"; ctx.fillText(doneNote, 400, 308); ctx.fillText("Press R or tap to ride again", 400, 350);
   }
 }
 
@@ -273,6 +273,25 @@ TRACKS.forEach((t, i) => {
   btn.textContent = t.name;
   btn.addEventListener("click", () => { loadTrack(i); btn.blur(); });
   tracksEl.appendChild(btn);
+});
+
+// ---------- touch + buttons ----------
+document.querySelectorAll("#pad [data-key]").forEach((b) => {
+  const k = b.dataset.key;
+  b.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    keys[k] = true; b.classList.add("down");
+    try { b.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  const off = () => { keys[k] = false; b.classList.remove("down"); };
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach((t) => b.addEventListener(t, off));
+});
+document.getElementById("pad").addEventListener("contextmenu", (e) => e.preventDefault());
+addEventListener("touchstart", () => document.body.classList.add("touch"), { once: true, passive: true });
+cv.addEventListener("pointerdown", () => { if (state === "done") reset(); }); // tap the result screen to ride again
+["btnRestart", "btnGhost"].forEach((id) => {
+  const b = document.getElementById(id);
+  b.addEventListener("click", () => { (id === "btnRestart" ? reset : cycleGhost)(); b.blur(); });
 });
 
 let last = performance.now();
